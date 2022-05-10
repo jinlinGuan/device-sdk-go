@@ -41,6 +41,7 @@ func BootstrapHandler(ctx context.Context, wg *sync.WaitGroup, startupTimer star
 	}
 
 	messageBusInfo := config.MessageQueue
+	messageBusInfo.Optional = deepCopy(messageBusInfo.Optional)
 
 	messageBusInfo.AuthMode = strings.ToLower(strings.TrimSpace(messageBusInfo.AuthMode))
 	if len(messageBusInfo.AuthMode) > 0 && messageBusInfo.AuthMode != bootstrapMessaging.AuthModeNone {
@@ -109,4 +110,12 @@ func BootstrapHandler(ctx context.Context, wg *sync.WaitGroup, startupTimer star
 
 	lc.Error("Connecting to MessageBus time out")
 	return false
+}
+
+func deepCopy(target map[string]string) map[string]string {
+	result := make(map[string]string)
+	for key, value := range target {
+		result[key] = value
+	}
+	return result
 }
